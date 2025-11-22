@@ -1,6 +1,4 @@
 {
-  config,
-  lib,
   pkgs,
   ...
 }:
@@ -17,101 +15,90 @@ let
   socket = "/run/${name}/gunicorn.sock";
   homeDir = "/srv/${name}";
   staticDir = "${homeDir}/static/";
-  cfg = config.services."${name}";
 in
 {
-  options.services."${name}" = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
-      description = "Enable ${name} systemd service and dependencies";
+  systemd.services."${name}" = {
+    description = "Manage ${name}";
+    wantedBy = [ "multi-user.target" ];
+    wants = [ "postgresql.target" ];
+
+    serviceConfig = {
+      Environment = [
+        "DJANGO_SETTINGS_MODULE=backend.settings"
+        "FARM_INFRA_BACKEND_PRODUCTION=1"
+      ];
+      ExecStartPre = [
+        "${pythonEnv}/bin/django-admin migrate"
+        "${pythonEnv}/bin/django-admin collectstatic --no-input"
+        "${pythonEnv}/bin/django-admin loaddata todo" # sample todos, remove this in prod :)
+        "${pythonEnv}/bin/django-admin loaddata admin" # add admin:admin account. DON'T DO THIS IN PROD !
+      ];
+      ExecStart = "${pythonEnv}/bin/gunicorn -b unix:${socket} backend.wsgi";
+      Restart = "always";
+      User = name;
+      Group = name;
+      RuntimeDirectory = name;
+      RuntimeDirectoryMode = "0750";
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    systemd.services."${name}" = {
-      description = "Manage ${name}";
-      wantedBy = [ "multi-user.target" ];
-      wants = [ "postgresql.target" ];
+  users.groups."${name}" = { };
+  users.users."${name}" = {
+    isSystemUser = true;
+    createHome = true;
+    home = homeDir;
+    homeMode = "0750";
+    group = name;
+    packages = [ pythonEnv ];
+  };
+  users.users.nginx.extraGroups = [ name ];
 
-      serviceConfig = {
-        Environment = [
-          "DJANGO_SETTINGS_MODULE=backend.settings"
-          "FARM_INFRA_BACKEND_PRODUCTION=1"
-        ];
-        ExecStartPre = [
-          "${pythonEnv}/bin/django-admin migrate"
-          "${pythonEnv}/bin/django-admin collectstatic --no-input"
-          "${pythonEnv}/bin/django-admin loaddata todo" # sample todos, remove this in prod :)
-          "${pythonEnv}/bin/django-admin loaddata admin" # add admin:admin account. DON'T DO THIS IN PROD !
-        ];
-        ExecStart = "${pythonEnv}/bin/gunicorn -b unix:${socket} backend.wsgi";
-        Restart = "always";
-        User = name;
-        Group = name;
-        RuntimeDirectory = name;
-        RuntimeDirectoryMode = "0750";
-      };
+  services = {
+    postgresql = {
+      enable = true;
+      ensureDatabases = [ name ];
+      ensureUsers = [
+        {
+          name = name;
+          ensureDBOwnership = true;
+          ensureClauses = {
+            createdb = true;
+            createrole = true;
+          };
+        }
+      ];
     };
+    nginx = {
+      enable = true;
+      virtualHosts.localhost = {
+        default = true;
+        locations =
+          let
+            backend = {
+              proxyPass = "http://unix:${socket}";
+              extraConfig = ''
+                proxy_set_header Host $host;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Real-IP $remote_addr;
+              '';
+            };
+            static = root: {
+              root = root;
+              extraConfig = ''
+                autoindex off;
+                expires 30d;
+              '';
+            };
 
-    users.groups."${name}" = { };
-    users.users."${name}" = {
-      isSystemUser = true;
-      createHome = true;
-      home = homeDir;
-      homeMode = "0750";
-      group = name;
-      packages = [ pythonEnv ];
-    };
-    users.users.nginx.extraGroups = [ name ];
-
-    services = {
-      postgresql = {
-        enable = true;
-        ensureDatabases = [ name ];
-        ensureUsers = [
+          in
           {
-            name = name;
-            ensureDBOwnership = true;
-            ensureClauses = {
-              createdb = true;
-              createrole = true;
-            };
-          }
-        ];
-      };
-      nginx = {
-        enable = true;
-        virtualHosts.localhost = {
-          default = true;
-          locations =
-            let
-              backend = {
-                proxyPass = "http://unix:${socket}";
-                extraConfig = ''
-                  proxy_set_header Host $host;
-                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                  proxy_set_header X-Real-IP $remote_addr;
-                '';
-              };
-              static = root: {
-                root = root;
-                extraConfig = ''
-                  autoindex off;
-                  expires 30d;
-                '';
-              };
-
-            in
-            {
-              "/api" = backend;
-              "/admin" = backend;
-              "/static/" = static staticDir;
-              "/" = static svelteApp;
-            };
-        };
+            "/api" = backend;
+            "/admin" = backend;
+            "/static/" = static staticDir;
+            "/" = static svelteApp;
+          };
       };
     };
-    networking.firewall.allowedTCPPorts = [ 80 ];
   };
+  networking.firewall.allowedTCPPorts = [ 80 ];
 }

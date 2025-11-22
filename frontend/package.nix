@@ -26,9 +26,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-JhXCFRI77NCyBHvxepziixdJWhK5LDYXjwoeCrcoadU=";
   };
 
-  buildPhase = "yarn build --outDir $out";
-  checkPhase = "yarn check";
+  # in dev we're on http://localhost:5173/, so we need to document the API full URL.
+  # but in prod, we want to rely on nginx to correctly wire things, so we can http://whatever.tld/api/todos
+  buildPhase = "substituteInPlace src/lib/api.ts --replace-fail 'http://localhost:8000' ''";
 
+  installPhase = "yarn build --outDir $out";
+
+  checkPhase = "yarn check";
   doCheck = true;
 
   meta = {

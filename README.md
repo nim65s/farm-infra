@@ -16,7 +16,7 @@ cd frontend
 yarn dev
 ```
 
-## VM
+## Server VM
 
 ### Build & Start
 

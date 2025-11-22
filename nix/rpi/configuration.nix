@@ -6,9 +6,10 @@
   imports = [
     "${modulesPath}/installer/sd-card/sd-image-aarch64.nix"
     ../common.nix
+    ../farm-infra-kiosk.nix
   ];
 
-  networking.hostName = "farm-infra-kiosk";
+  networking.hostName = "farm-infra-rpi";
   nixpkgs.hostPlatform = "aarch64-linux";
 
   # For the demo only: set a static IPv4 so that I can ssh

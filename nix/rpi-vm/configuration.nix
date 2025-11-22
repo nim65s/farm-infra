@@ -4,11 +4,12 @@
 }:
 {
   imports = [
-    "${modulesPath}/virtualisation/qemu-vm.nix" # if you want to run this in qemu
+    "${modulesPath}/virtualisation/qemu-vm.nix"
     ../common.nix
+    ../farm-infra-kiosk.nix
   ];
 
-  networking.hostName = "farm-infra-kiosk-vm";
+  networking.hostName = "farm-infra-rpi-vm";
   nixpkgs.hostPlatform = "x86_64-linux";
 
   # For the demo only: start this system in a VM

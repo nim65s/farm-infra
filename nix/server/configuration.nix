@@ -12,8 +12,6 @@
   networking.hostName = "farm-infra-server";
   nixpkgs.hostPlatform = "x86_64-linux";
 
-  services.farm-infra-web.enable = true;
-
   # For the demo only: start this system in a VM
   # For real hardware, you can remove this, and add disk configuration and hardware infos instead
   # ref. https://wiki.nixos.org/wiki/Nixos-generate-config (this is a part of the NixOS .iso install medium)
