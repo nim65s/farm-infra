@@ -1,0 +1,31 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = "Backend for farm infra"
+readme = "README.md"
+authors = [
+    { name = "Guilhem Saurel", email = "guilhem.saurel@laas.fr" }
+]
+license = "MIT"
+requires-python = ">=3.13"
+dependencies = [
+    "django>=4.2.26",
+    "django-ninja>=1.4.3", # generate nice API for frontend
+]
+
+[dependency-groups]
+dev = [
+    "django-stubs>=5.2.7", # just so that my $EDITOR stop complaining
+    "pytest-django>=4.11.1",
+]
+
+[build-system]
+requires = ["uv_build"]
+build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "backend.settings"
+python_files = ["tests.py"]
+
+[tool.uv.build-backend]
+module-root = ""

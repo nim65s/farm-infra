@@ -1,0 +1,34 @@
+[
+  {
+    "model": "backend.todo",
+    "pk": 1,
+    "fields": {
+      "done": true,
+      "description": "Écrire un backend"
+    }
+  },
+  {
+    "model": "backend.todo",
+    "pk": 2,
+    "fields": {
+      "done": false,
+      "description": "Écrire un frontend"
+    }
+  },
+  {
+    "model": "backend.todo",
+    "pk": 3,
+    "fields": {
+      "done": false,
+      "description": "Préparer le sol"
+    }
+  },
+  {
+    "model": "backend.todo",
+    "pk": 4,
+    "fields": {
+      "done": false,
+      "description": "Planter des tomates dans l’allée 4"
+    }
+  }
+]
