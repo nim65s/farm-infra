@@ -35,6 +35,13 @@
       perSystem =
         { pkgs, ... }:
         {
+          devShells.default = pkgs.mkShell {
+            packages = [
+              pkgs.uv
+              pkgs.yarn-berry
+              pkgs.nodejs_24
+            ];
+          };
           packages = {
             backend = pkgs.python3Packages.callPackage ./backend/package.nix { };
           };
