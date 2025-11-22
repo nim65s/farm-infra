@@ -1,2 +1,5 @@
 *.qcow2
 *.sqlite3
+__pycache__
+dist
+result

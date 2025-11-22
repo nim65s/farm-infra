@@ -39,11 +39,13 @@
             packages = [
               pkgs.uv
               pkgs.yarn-berry
-              pkgs.nodejs_24
+              pkgs.yarn-berry.yarn-berry-fetcher
+              pkgs.nodejs
             ];
           };
           packages = {
             backend = pkgs.python3Packages.callPackage ./backend/package.nix { };
+            frontend = pkgs.callPackage ./frontend/package.nix { };
           };
         };
     };

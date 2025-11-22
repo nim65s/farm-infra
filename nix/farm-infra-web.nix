@@ -6,16 +6,17 @@
 }:
 
 let
-  app = pkgs.python3Packages.callPackage ./package.nix { };
+  svelteApp = pkgs.callPackage ../frontend/package.nix { };
+  backendApp = pkgs.python3Packages.callPackage ../backend/package.nix { };
   pythonEnv = pkgs.python3.withPackages (p: [
-    app
+    backendApp
     p.gunicorn
     p.psycopg
   ]);
-  name = "farm-infra-backend";
+  name = "farm-infra-web";
   socket = "/run/${name}/gunicorn.sock";
-  home = "/srv/${name}";
-  static = "${home}/static/";
+  homeDir = "/srv/${name}";
+  staticDir = "${homeDir}/static/";
   cfg = config.services."${name}";
 in
 {
@@ -23,17 +24,13 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Enable ${app.meta.description} systemd service";
-    };
-    hostName = lib.mkOption {
-      default = "backend.localhost";
-      description = "nginx virtual host";
+      description = "Enable ${name} systemd service and dependencies";
     };
   };
 
   config = lib.mkIf cfg.enable {
     systemd.services."${name}" = {
-      description = app.meta.description;
+      description = "Manage ${name}";
       wantedBy = [ "multi-user.target" ];
       wants = [ "postgresql.target" ];
 
@@ -45,8 +42,8 @@ in
         ExecStartPre = [
           "${pythonEnv}/bin/django-admin migrate"
           "${pythonEnv}/bin/django-admin collectstatic --no-input"
-          "${pythonEnv}/bin/django-admin loaddata admin"
-          "${pythonEnv}/bin/django-admin loaddata todo"
+          "${pythonEnv}/bin/django-admin loaddata todo" # sample todos, remove this in prod :)
+          "${pythonEnv}/bin/django-admin loaddata admin" # add admin:admin account. DON'T DO THIS IN PROD !
         ];
         ExecStart = "${pythonEnv}/bin/gunicorn -b unix:${socket} backend.wsgi";
         Restart = "always";
@@ -61,7 +58,7 @@ in
     users.users."${name}" = {
       isSystemUser = true;
       createHome = true;
-      home = home;
+      home = homeDir;
       homeMode = "0750";
       group = name;
       packages = [ pythonEnv ];
@@ -85,26 +82,33 @@ in
       };
       nginx = {
         enable = true;
+        virtualHosts.localhost = {
+          default = true;
+          locations =
+            let
+              backend = {
+                proxyPass = "http://unix:${socket}";
+                extraConfig = ''
+                  proxy_set_header Host $host;
+                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                  proxy_set_header X-Real-IP $remote_addr;
+                '';
+              };
+              static = root: {
+                root = root;
+                extraConfig = ''
+                  autoindex off;
+                  expires 30d;
+                '';
+              };
 
-        virtualHosts."${cfg.hostName}" = {
-          root = static;
-
-          locations."/" = {
-            proxyPass = "http://unix:${socket}";
-            extraConfig = ''
-              proxy_set_header Host $host;
-              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-              proxy_set_header X-Real-IP $remote_addr;
-            '';
-          };
-
-          locations."/static/" = {
-            alias = static;
-            extraConfig = ''
-              autoindex off;
-              expires 30d;
-            '';
-          };
+            in
+            {
+              "/api" = backend;
+              "/admin" = backend;
+              "/static/" = static staticDir;
+              "/" = static svelteApp;
+            };
         };
       };
     };

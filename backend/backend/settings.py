@@ -28,9 +28,11 @@ SECRET_KEY = "django-insecure-(gciy^-sq_he__@_(*phvjqpc(2m0*3=44p6%uo6$segq@3gd7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "web.farm"]
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost:8000"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost:8000", "http://web.farm:8000"]
+
+# Only for dev. In prod we have nginx magic.
 CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
 
 
@@ -84,7 +86,7 @@ DATABASES = {
     "default": (
         {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": "farm-infra-backend",
+            "NAME": "farm-infra-web",
         }
         if FARM_INFRA_BACKEND_PRODUCTION
         else {

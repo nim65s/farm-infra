@@ -12,6 +12,7 @@
   uv-build,
 
   django,
+  django-cors-headers,
   django-ninja,
 
   pytestCheckHook,
@@ -30,6 +31,7 @@ buildPythonPackage {
 
   dependencies = [
     django
+    django-cors-headers
     django-ninja
   ];
 
