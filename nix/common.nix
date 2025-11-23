@@ -32,7 +32,6 @@
     experimental-features = [
       "nix-command"
       "flakes"
-      "repl-flake"
     ];
     extra-substituters = [
       "https://ros.cachix.org"
