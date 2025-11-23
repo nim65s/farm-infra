@@ -16,7 +16,11 @@
   services.xserver.enable = false;
 
   services.getty.autologinUser = "kiosk";
-  programs.bash.loginShellInit = "exec cage -- chromium --kiosk http://web.farm:8000";
+  programs.bash.loginShellInit = ''
+    if [ "$USER" = "kiosk" ]; then
+      exec cage -- chromium --kiosk http://web.farm:8000
+    fi
+  '';
 
   fonts.packages = [
     pkgs.noto-fonts
