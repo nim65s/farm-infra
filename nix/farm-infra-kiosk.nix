@@ -24,7 +24,7 @@
   ];
 
   networking.hosts = {
-    "192.168.8.106" = [ "web.farm" ];
+    "192.168.3.10" = [ "web.farm" ];
   };
 
   # cage won't read services.xserver.xkb on its own :(

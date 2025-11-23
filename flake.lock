@@ -42,32 +42,32 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1761810010,
-        "narHash": "sha256-o0wJKW603SiOO373BTgeZaF6nDxegMA/cRrzSC2Cscg=",
+        "lastModified": 1760210220,
+        "narHash": "sha256-XDxF2JibqR111jb9oG/RT8NbIcowKnXqtL/UZODHfog=",
         "owner": "lopsided98",
         "repo": "nix-ros-overlay",
-        "rev": "e277df39e3bc6b372a5138c0bcf10198857c55ab",
+        "rev": "705660e0fe9014db8d5e16c8691f50bf3bf013b8",
         "type": "github"
       },
       "original": {
         "owner": "lopsided98",
-        "ref": "master",
+        "ref": "ros1-25.05",
         "repo": "nix-ros-overlay",
         "type": "github"
       }
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1744849697,
-        "narHash": "sha256-S9hqvanPSeRu6R4cw0OhvH1rJ+4/s9xIban9C4ocM/0=",
-        "owner": "lopsided98",
+        "lastModified": 1759994382,
+        "narHash": "sha256-wSK+3UkalDZRVHGCRikZ//CyZUJWDJkBDTQX1+G77Ow=",
+        "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "6318f538166fef9f5118d8d78b9b43a04bb049e4",
+        "rev": "5da4a26309e796daa7ffca72df93dbe53b8164c7",
         "type": "github"
       },
       "original": {
-        "owner": "lopsided98",
-        "ref": "nix-ros",
+        "owner": "NixOS",
+        "ref": "nixos-25.05",
         "repo": "nixpkgs",
         "type": "github"
       }

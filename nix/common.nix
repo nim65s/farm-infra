@@ -28,6 +28,20 @@
     flake = "github:nim65s/farm-infra";
   };
 
+  nix.settings = {
+    experimental-features = [
+      "nix-command"
+      "flakes"
+      "repl-flake"
+    ];
+    extra-substituters = [
+      "https://ros.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "ros.cachix.org-1:dSyZxI8geDCJrwgvCOHDoAfOm5sV1wCPjBkKL+38Rvo="
+    ];
+  };
+
   # This define the initial version and meaning for all other config options.
   # Do **NOT** ever change it, once a system is deployed.
   system.stateVersion = "25.05";

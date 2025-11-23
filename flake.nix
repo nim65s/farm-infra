@@ -1,12 +1,12 @@
 {
-  description = "Farm Infra";
+  description = "Farm Infra Example";
 
   inputs = {
-    # up-to-date packages, built on a slightly less up-to-date nixpkgs
-    nix-ros-overlay.url = "github:lopsided98/nix-ros-overlay/master";
-    # the slightly less up-to-date nixpkgs for ROS packages, might be a few months old
+    # up-to-date ROS noetic packages, built on a nixpkgs from 25.05
+    nix-ros-overlay.url = "github:lopsided98/nix-ros-overlay/ros1-25.05";
+    # handle to nixpkgs from above. That one is supported until 2026. After that please swtich to ROS 2 :)
     nixpkgs-ros.follows = "nix-ros-overlay/nixpkgs";
-    # up-to-date nixpkgs, for a secure system
+    # up-to-date rolling release nixpkgs
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     # helper
     flake-parts.url = "github:hercules-ci/flake-parts";
@@ -37,10 +37,16 @@
         {
           devShells.default = pkgs.mkShell {
             packages = [
+              # burn RPi sd card / usb stick
+              pkgs.caligula
+
+              # backend
               pkgs.uv
+
+              # frontend
+              pkgs.nodejs
               pkgs.yarn-berry
               pkgs.yarn-berry.yarn-berry-fetcher
-              pkgs.nodejs
             ];
           };
           packages = {
