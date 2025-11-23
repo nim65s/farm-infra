@@ -33,7 +33,14 @@ ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 2222 root@loc
 ## RPi
 
 Demo laptop must have 192.168.3.10/24, aka. web.farm
+
 RPi has hardcoded     192.168.3.14/24.
+
+Also, 8000 must be open on host, so eg.:
+```
+sudo ip addr add 192.168.3.10/24 dev CHANGEME
+sudo iptables -I INPUT -p tcp --dport 8000 -j ACCEPT
+```
 
 ### Initial deploy
 
