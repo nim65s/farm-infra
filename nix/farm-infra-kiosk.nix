@@ -8,6 +8,7 @@
     isNormalUser = true;
     packages = [
       pkgs.cage
+      pkgs.firefox
       pkgs.ungoogled-chromium
     ];
   };
@@ -18,7 +19,7 @@
   services.getty.autologinUser = "kiosk";
   programs.bash.loginShellInit = ''
     if [ "$USER" = "kiosk" ]; then
-      exec cage -- chromium --kiosk http://web.farm:8000
+      cage -- firefox http://web.farm:8000
     fi
   '';
 
