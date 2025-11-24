@@ -13,7 +13,7 @@
     ];
   };
 
-  hardware.opengl.enable = true;
+  hardware.graphics.enable = true;
   services.xserver.enable = false;
 
   services.getty.autologinUser = "kiosk";
