@@ -7,6 +7,7 @@
     "${modulesPath}/installer/sd-card/sd-image-aarch64.nix"
     ../common.nix
     ../farm-infra-kiosk.nix
+    ../wifi.nix
   ];
 
   networking.hostName = "farm-infra-rpi";
