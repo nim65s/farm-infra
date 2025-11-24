@@ -3,12 +3,15 @@
   pkgs,
   ...
 }:
+let
+  xkb = config.services.xserver.xkb;
+in
 {
   users.users.kiosk = {
     isNormalUser = true;
+    linger = true;
     packages = [
       pkgs.cage
-      pkgs.firefox
       pkgs.ungoogled-chromium
     ];
   };
@@ -17,11 +20,19 @@
   services.xserver.enable = false;
 
   services.getty.autologinUser = "kiosk";
-  programs.bash.loginShellInit = ''
-    if [ "$USER" = "kiosk" ]; then
-      cage -- firefox http://web.farm:8000
-    fi
-  '';
+  systemd.user.services.kiosk = {
+    description = "Kiosk Session: chromium in cage";
+    wantedBy = [ "default.target" ];
+    serviceConfig = {
+      Type = "simple";
+      ExecStart = "${pkgs.cage}/bin/cage -- chromium http://web.farm:8000";
+      # cage won't read services.xserver.xkb on its own :(
+      Environment = [
+        "XKB_DEFAULT_LAYOUT=${xkb.layout}"
+        "XKB_DEFAULT_VARIANT=${xkb.variant}"
+      ];
+    };
+  };
 
   fonts.packages = [
     pkgs.noto-fonts
@@ -30,11 +41,5 @@
 
   networking.hosts = {
     "192.168.3.10" = [ "web.farm" ];
-  };
-
-  # cage won't read services.xserver.xkb on its own :(
-  environment.variables = {
-    XKB_DEFAULT_LAYOUT = config.services.xserver.xkb.layout;
-    XKB_DEFAULT_VARIANT = config.services.xserver.xkb.variant;
   };
 }
