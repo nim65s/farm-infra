@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   ...
 }:
@@ -74,8 +75,12 @@ in
         default = true;
         locations =
           let
-            backend = {
-              proxyPass = "http://unix:${socket}";
+            grafanaHost = config.services.grafana.settings.server.http_addr;
+            grafanaPort = config.services.grafana.settings.server.http_port;
+            opensearchHost = config.services.opensearch.settings."network.host";
+            opensearchPort = config.services.opensearch.settings."http.port";
+            proxy = proxyPass: {
+              proxyPass = proxyPass;
               extraConfig = ''
                 proxy_set_header Host $host;
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -89,12 +94,13 @@ in
                 expires 30d;
               '';
             };
-
           in
           {
-            "/api" = backend;
-            "/admin" = backend;
-            "/static/" = static staticDir;
+            "/api" = proxy "http://unix:${socket}";
+            "/admin" = proxy "http://unix:${socket}";
+            "/static" = static staticDir;
+            "/grafana" = proxy "http://${grafanaHost}:${toString grafanaPort}";
+            "/opensearch" = proxy "http://${opensearchHost}:${toString opensearchPort}";
             "/" = static svelteApp;
           };
       };

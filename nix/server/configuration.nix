@@ -7,6 +7,7 @@
     "${modulesPath}/virtualisation/qemu-vm.nix" # if you want to run this in qemu
     ../common.nix
     ../farm-infra-web.nix
+    ../elk.nix
   ];
 
   networking.hostName = "farm-infra-server";
