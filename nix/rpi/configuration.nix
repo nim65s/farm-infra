@@ -29,6 +29,7 @@
     pkgs.btop
   ];
   programs = {
+    tmux.enable = true;
     trippy.enable = true;
   };
 }
