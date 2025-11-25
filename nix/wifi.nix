@@ -7,9 +7,8 @@
       autoconnect = true;
     };
     ipv4 = {
-      address1 = "192.168.3.14/24";
-      method = "manual";
-      dhcp = "yes";
+      address2 = "192.168.3.14/24";
+      method = "auto";
     };
     wifi = {
       mode = "infrastructure";
