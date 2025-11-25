@@ -25,6 +25,7 @@
 
   # debug tools
   programs = {
+    btop.enable = true;
     trippy.enable = true;
   };
 }
