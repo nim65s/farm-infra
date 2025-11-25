@@ -1,14 +1,14 @@
 {
+  pkgs,
+  ...
+}:
+{
   networking.networkmanager.enable = true;
   networking.networkmanager.ensureProfiles.profiles.azvfp = {
     connection = {
       id = "azvfp";
       type = "wifi";
       autoconnect = true;
-    };
-    ipv4 = {
-      address2 = "192.168.3.14/24";
-      method = "auto";
     };
     wifi = {
       mode = "infrastructure";
@@ -22,4 +22,17 @@
       psk = "azvfp4tw";
     };
   };
+
+  # because it's 2025 and I still have no idea how to tell NetworkManager
+  # I want both the dhcp and a static ipv4…
+  networking.networkmanager.dispatcherScripts = [
+    {
+      source = pkgs.writeShellScript "nm-azvfp-static-ip" ''
+        if [ "$2" = "up" ] && [ "$CONNECTION_ID" = "azvfp" ]; then
+          logger "NM dispatcher: adding 192.168.3.14/24 to wlan0"
+          ip addr add 192.168.3.14/24 dev "$DEVICE_IFACE" || true
+        fi
+      '';
+    }
+  ];
 }
