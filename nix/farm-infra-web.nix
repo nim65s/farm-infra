@@ -97,10 +97,10 @@ in
           in
           {
             "/api" = proxy "http://unix:${socket}";
-            "/admin" = proxy "http://unix:${socket}";
+            "/backend" = proxy "http://unix:${socket}";
             "/static" = static staticDir;
             "/grafana" = proxy "http://${grafanaHost}:${toString grafanaPort}";
-            "/opensearch" = proxy "http://${opensearchHost}:${toString opensearchPort}";
+            "/opensearch/" = proxy "http://${opensearchHost}:${toString opensearchPort}/";
             "/" = static svelteApp;
           };
       };
