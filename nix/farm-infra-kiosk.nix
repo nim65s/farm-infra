@@ -10,6 +10,7 @@ in
   users.users.kiosk = {
     isNormalUser = true;
     linger = true;
+    openssh.authorizedKeys.keys = config.users.users.root.openssh.authorizedKeys.keys;
     packages = [
       pkgs.cage
       pkgs.ungoogled-chromium
