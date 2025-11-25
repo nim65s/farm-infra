@@ -21,11 +21,10 @@
         prefixLength = 24;
       }
     ];
-    wlan0.ipv4.addresses = [
-      {
-        address = "192.168.3.14";
-        prefixLength = 24;
-      }
-    ];
+  };
+
+  # debug tools
+  programs = {
+    trippy.enable = true;
   };
 }
