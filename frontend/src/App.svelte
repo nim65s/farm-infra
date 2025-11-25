@@ -1,4 +1,5 @@
 <script lang="ts">
+  // import Ros from "./lib/Ros.svelte";
   import {
     getTodos,
     createTodo,
@@ -55,6 +56,8 @@
     </li>
   {/each}
 </ul>
+
+<!-- <Ros /> -->
 
 <style>
   ul {
