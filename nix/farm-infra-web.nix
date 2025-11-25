@@ -23,11 +23,12 @@ in
     wantedBy = [ "multi-user.target" ];
     wants = [ "postgresql.target" ];
 
+    environment = {
+      DJANGO_SETTINGS_MODULE = "backend.settings";
+      FARM_INFRA_BACKEND_PRODUCTION = "1";
+    };
+
     serviceConfig = {
-      Environment = [
-        "DJANGO_SETTINGS_MODULE=backend.settings"
-        "FARM_INFRA_BACKEND_PRODUCTION=1"
-      ];
       ExecStartPre = [
         "${pythonEnv}/bin/django-admin migrate"
         "${pythonEnv}/bin/django-admin collectstatic --no-input"
@@ -82,6 +83,10 @@ in
             proxy = proxyPass: {
               proxyPass = proxyPass;
               extraConfig = ''
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection "upgrade";
+
                 proxy_set_header Host $host;
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
                 proxy_set_header X-Real-IP $remote_addr;
@@ -101,6 +106,9 @@ in
             "/static" = static staticDir;
             "/grafana" = proxy "http://${grafanaHost}:${toString grafanaPort}";
             "/opensearch/" = proxy "http://${opensearchHost}:${toString opensearchPort}/";
+            "/ws/salameche" = proxy "http://localhost:9001";
+            "/ws/carapuce" = proxy "http://localhost:9002";
+            "/ws/bulbizarre" = proxy "http://localhost:9003";
             "/" = static svelteApp;
           };
       };

@@ -23,6 +23,7 @@
         nixosConfigurations = {
           farm-infra-server = inputs.nixpkgs.lib.nixosSystem {
             modules = [ ./nix/server/configuration.nix ];
+            specialArgs = { inherit inputs; };
           };
           farm-infra-rpi = inputs.nixpkgs.lib.nixosSystem {
             modules = [ ./nix/rpi/configuration.nix ];
