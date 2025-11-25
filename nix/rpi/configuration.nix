@@ -1,5 +1,6 @@
 {
   modulesPath,
+  pkgs,
   ...
 }:
 {
@@ -24,8 +25,10 @@
   };
 
   # debug tools
+  environment.systemPackages = [
+    pkgs.btop
+  ];
   programs = {
-    btop.enable = true;
     trippy.enable = true;
   };
 }
