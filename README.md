@@ -21,7 +21,7 @@ yarn dev
 ### Build & Start
 
 ```
-nix run .#nixosConfigurations.server.config.system.build.vm
+nix run .#nixosConfigurations.farm-infra-server.config.system.build.vm
 ```
 
 ### SSH
@@ -45,6 +45,6 @@ sudo iptables -I INPUT -p tcp --dport 8000 -j ACCEPT
 ### Initial deploy
 
 ```
-nix build .#nixosConfigurations.rpi.config.system.build.sdImage
+nix build .#nixosConfigurations.farm-infra-rpi.config.system.build.sdImage
 caligula burn result/sd-image/nixos-image-sd-card-*-aarch64-linux.img.zst
 ```
