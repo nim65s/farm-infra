@@ -6,9 +6,8 @@
       type = "wifi";
       autoconnect = true;
     };
-    ipv4 = {
-      method = "auto";
-      address1 = "192.168.3.14/24";
+    ipv6 = {
+      address1 = "fd3a:314::14/64";
     };
     wifi = {
       mode = "infrastructure";
@@ -17,7 +16,7 @@
     wifi-security = {
       key-mgmt = "wpa-psk";
       # Yes, this is a cleartext password that I do use for this demo.
-      # A better solution is to encrypt that in a way the host can decrypt at runtime:
+      # A better solution is to encrypt that in a way the host can decrypt at runtime, eg:
       # https://github.com/nim65s/dotfiles/blob/main/vars/shared/wifi.azv/password/secret
       psk = "azvfp4tw";
     };
