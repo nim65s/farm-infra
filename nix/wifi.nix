@@ -6,9 +6,10 @@
       type = "wifi";
       autoconnect = true;
     };
-    ipv6 = {
-      address1 = "fd3a:314::1/64";
+    ipv4 = {
+      address1 = "192.168.3.14/24";
       method = "manual";
+      dhcp = "yes";
     };
     wifi = {
       mode = "infrastructure";
