@@ -7,7 +7,8 @@
       autoconnect = true;
     };
     ipv6 = {
-      address1 = "fd3a:314::14/64";
+      address1 = "fd3a:314::1/64";
+      method = "manual";
     };
     wifi = {
       mode = "infrastructure";
