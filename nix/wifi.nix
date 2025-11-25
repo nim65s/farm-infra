@@ -9,12 +9,7 @@
     ipv4 = {
       method = "manual";
       dhcp = "yes";
-      addresses = [
-        {
-          address = "192.168.3.14";
-          prefix = 24;
-        }
-      ];
+      address1 = "192.168.3.14/24";
     };
     wifi = {
       mode = "infrastructure";
