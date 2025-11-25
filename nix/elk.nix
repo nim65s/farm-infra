@@ -1,31 +1,70 @@
+# TODO
+# Somehow find a stack that work…
+# opensearch ? fluent-bit ? loki ? grafana ? promtail ? vector ?
 {
   config,
   pkgs,
   ...
 }:
-let
-  opensearchHost = config.services.opensearch.settings."network.host";
-  opensearchPort = config.services.opensearch.settings."http.port";
-  opensearchUrl = "http://${opensearchHost}:${toString opensearchPort}";
-in
 {
   services = {
-    opensearch = {
-      enable = true;
-    };
-    vector = {
+    fluent-bit = {
       enable = true;
       settings = {
-        sources.journald = {
-          type = "journald";
+        pipeline = {
+          inputs = [
+            {
+              name = "systemd";
+            }
+          ];
+          outputs = [
+            {
+              name = "loki";
+              match = "host.*";
+              host = "127.0.0.1";
+              port = 3100;
+              labels = "job=systemd,host=${config.networking.hostName}";
+            }
+          ];
         };
-        sinks.opensearch = {
-          type = "elasticsearch";
-          inputs = [ "journald" ];
-          opensearch_service_type = "managed";
-          endpoints = [ opensearchUrl ];
-          index = "logs-%Y-%m-%d";
-          suppress_type_name = true;
+      };
+    };
+    loki = {
+      enable = true;
+      # copy/paste from https://grafana.com/docs/loki/latest/configure/examples/configuration-examples/#1-local-configuration-exampleyaml
+      configuration = {
+        "auth_enabled" = false;
+        "server" = {
+          "http_listen_port" = 3100;
+        };
+        "common" = {
+          "ring" = {
+            "instance_addr" = "127.0.0.1";
+            "kvstore" = {
+              "store" = "inmemory";
+            };
+          };
+          "replication_factor" = 1;
+          "path_prefix" = "/tmp/loki";
+        };
+        "schema_config" = {
+          "configs" = [
+            {
+              "from" = "2020-05-15";
+              "store" = "tsdb";
+              "object_store" = "filesystem";
+              "schema" = "v13";
+              "index" = {
+                "prefix" = "index_";
+                "period" = "24h";
+              };
+            }
+          ];
+        };
+        "storage_config" = {
+          "filesystem" = {
+            "directory" = "/tmp/loki/chunks";
+          };
         };
       };
     };
@@ -43,15 +82,11 @@ in
         enable = true;
         datasources.settings.datasources = [
           {
-            name = "OpenSearch";
-            type = "grafana-opensearch-datasource";
-            url = opensearchUrl;
+            name = "Loki";
+            type = "loki";
             access = "proxy";
-            jsonData = {
-              timeField = "@timestamp";
-              flavor = "opensearch";
-              version = "2.19.2";
-            };
+            url = "http://127.0.0.1:3100";
+            isDefault = true;
           }
         ];
       };
