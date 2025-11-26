@@ -9,6 +9,7 @@
     ./web.nix
     ./ros.nix
     ./logs.nix
+    ./docker.nix
   ];
 
   networking.hostName = "server";

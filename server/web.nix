@@ -102,6 +102,7 @@ in
             "/backend" = proxy "http://unix:${socket}";
             "/static" = static staticDir;
             "/logs/" = proxy "http://localhost:${toString journaldGatewayPort}/";
+            "/whoami" = proxy "http://localhost:8080";
             "/ws/salameche" = proxy "http://localhost:9001";
             "/ws/carapuce" = proxy "http://localhost:9002";
             "/ws/bulbizarre" = proxy "http://localhost:9003";
