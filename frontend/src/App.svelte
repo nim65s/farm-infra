@@ -1,5 +1,5 @@
 <script lang="ts">
-  // import Ros from "./lib/Ros.svelte";
+  import Ros from "./lib/Ros.svelte";
   import {
     getTodos,
     createTodo,
@@ -57,7 +57,7 @@
   {/each}
 </ul>
 
-<!-- <Ros /> -->
+<Ros />
 
 <style>
   ul {
