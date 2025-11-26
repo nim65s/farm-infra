@@ -50,6 +50,7 @@
           packages = {
             backend = pkgs.python3Packages.callPackage ./backend/package.nix { };
             frontend = pkgs.callPackage ./frontend/package.nix { };
+            pcan = pkgs.callPackage ./rpi/pcan-linux-driver.nix { };
           };
         };
     };

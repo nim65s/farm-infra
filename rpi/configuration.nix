@@ -9,6 +9,7 @@
     ../common.nix
     ./kiosk.nix
     ./wifi.nix
+    ./touchscreen.nix
   ];
 
   networking.hostName = "rpi";
