@@ -9,6 +9,7 @@
     ../farm-infra-web.nix
     ../elk.nix
     ../ros.nix
+    ../logs.nix
   ];
 
   networking.hostName = "farm-infra-server";
