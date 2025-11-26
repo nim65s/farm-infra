@@ -21,7 +21,7 @@ yarn dev
 ### Build & Start
 
 ```
-nix run .#nixosConfigurations.farm-infra-server.config.system.build.vm
+nix run .#nixosConfigurations.server.config.system.build.vm
 ```
 
 ### SSH
@@ -34,7 +34,7 @@ ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 2222 root@loc
 
 Demo laptop must have 192.168.3.10/24, aka. web.farm
 
-RPi has hardcoded     192.168.3.14/24.
+RPi has hardcoded     192.168.3.14/24 on "azvfw" hardcoded wifi, and 192.168.2.14/24 on eth as fallback
 
 Also, 8000 must be open on host, so eg.:
 ```
@@ -45,6 +45,6 @@ sudo iptables -I INPUT -p tcp --dport 8000 -j ACCEPT
 ### Initial deploy
 
 ```
-nix build .#nixosConfigurations.farm-infra-rpi.config.system.build.sdImage
+nix build .#nixosConfigurations.rpi.config.system.build.sdImage
 caligula burn result/sd-image/nixos-image-sd-card-*-aarch64-linux.img.zst
 ```

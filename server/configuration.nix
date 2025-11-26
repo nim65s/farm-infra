@@ -6,13 +6,12 @@
   imports = [
     "${modulesPath}/virtualisation/qemu-vm.nix" # if you want to run this in qemu
     ../common.nix
-    ../farm-infra-web.nix
-    ../elk.nix
-    ../ros.nix
-    ../logs.nix
+    ./web.nix
+    ./ros.nix
+    ./logs.nix
   ];
 
-  networking.hostName = "farm-infra-server";
+  networking.hostName = "server";
   nixpkgs.hostPlatform = "x86_64-linux";
 
   # For the demo only: start this system in a VM

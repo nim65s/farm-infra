@@ -21,15 +21,12 @@
       ];
       flake = {
         nixosConfigurations = {
-          farm-infra-server = inputs.nixpkgs.lib.nixosSystem {
-            modules = [ ./nix/server/configuration.nix ];
+          server = inputs.nixpkgs.lib.nixosSystem {
+            modules = [ ./server/configuration.nix ];
             specialArgs = { inherit inputs; };
           };
-          farm-infra-rpi = inputs.nixpkgs.lib.nixosSystem {
-            modules = [ ./nix/rpi/configuration.nix ];
-          };
-          farm-infra-rpi-vm = inputs.nixpkgs.lib.nixosSystem {
-            modules = [ ./nix/rpi-vm/configuration.nix ];
+          rpi = inputs.nixpkgs.lib.nixosSystem {
+            modules = [ ./rpi/configuration.nix ];
           };
         };
       };

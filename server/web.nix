@@ -77,10 +77,6 @@ in
         locations =
           let
             journaldGatewayPort = config.services.journald.gateway.port;
-            grafanaHost = config.services.grafana.settings.server.http_addr;
-            grafanaPort = config.services.grafana.settings.server.http_port;
-            opensearchHost = config.services.opensearch.settings."network.host";
-            opensearchPort = config.services.opensearch.settings."http.port";
             proxy = proxyPass: {
               proxyPass = proxyPass;
               extraConfig = ''
@@ -105,8 +101,6 @@ in
             "/api" = proxy "http://unix:${socket}";
             "/backend" = proxy "http://unix:${socket}";
             "/static" = static staticDir;
-            "/grafana" = proxy "http://${grafanaHost}:${toString grafanaPort}";
-            "/opensearch/" = proxy "http://${opensearchHost}:${toString opensearchPort}/";
             "/logs/" = proxy "http://localhost:${toString journaldGatewayPort}/";
             "/ws/salameche" = proxy "http://localhost:9001";
             "/ws/carapuce" = proxy "http://localhost:9002";
