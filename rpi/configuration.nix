@@ -10,6 +10,7 @@
     ./kiosk.nix
     ./wifi.nix
     ./touchscreen.nix
+    # ./can.nix
   ];
 
   networking.hostName = "rpi";
