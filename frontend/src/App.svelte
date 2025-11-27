@@ -8,8 +8,8 @@
     type Todo
   } from "./lib/api";
 
-  let todos: Todo[] = [];
-  let text = "";
+  let todos: Todo[] = $state([]);
+  let text = $state("");
 
   async function load() {
     todos = await getTodos();

@@ -5,9 +5,9 @@
   const carapuce = createRosFeed("carapuce");
   const bulbizarre = createRosFeed("bulbizarre");
 
-  let msgsSal: string[] = [];
-  let msgsCar: string[] = [];
-  let msgsBul: string[] = [];
+  let msgsSal: string[] = $state([]);
+  let msgsCar: string[] = $state([]);
+  let msgsBul: string[] = $state([]);
 
   salameche.onMessage(m => msgsSal = [...m]);
   carapuce.onMessage(m => msgsCar = [...m]);

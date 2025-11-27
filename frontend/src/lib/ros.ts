@@ -8,8 +8,8 @@ export function createRosFeed(instance: string): RosFeed {
     const proto = window.location.protocol === "https:" ? "wss:" : "ws:";
     const host = window.location.host;
     const ws = new WebSocket(`${proto}//${host}/ws/${instance}`);
-    let messages: string[] = [];
-    let listeners: Array<(msgs: string[]) => void> = [];
+    let messages: string[] = $state([]);
+    let listeners: Array<(msgs: string[]) => void> = $state([]);
 
     ws.onopen = () => {
         ws.send(JSON.stringify({ op: "subscribe", topic: "/chatter" }));
