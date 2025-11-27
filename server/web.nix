@@ -77,12 +77,14 @@ in
         locations =
           let
             journaldGatewayPort = config.services.journald.gateway.port;
+            grafanaHost = config.services.grafana.settings.server.http_addr;
+            grafanaPort = config.services.grafana.settings.server.http_port;
             proxy = proxyPass: {
               proxyPass = proxyPass;
               extraConfig = ''
                 proxy_http_version 1.1;
                 proxy_set_header Upgrade $http_upgrade;
-                proxy_set_header Connection "upgrade";
+                proxy_set_header Connection $connection_upgrade;
 
                 proxy_set_header Host $host;
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -106,6 +108,8 @@ in
             "/ws/salameche" = proxy "http://localhost:9001";
             "/ws/carapuce" = proxy "http://localhost:9002";
             "/ws/bulbizarre" = proxy "http://localhost:9003";
+            "/alloy/" = proxy "http://localhost:12345/alloy/";
+            "/grafana" = proxy "http://${grafanaHost}:${toString grafanaPort}";
             "/" = static svelteApp;
           };
       };

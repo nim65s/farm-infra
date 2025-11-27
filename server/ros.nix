@@ -66,22 +66,22 @@ let
           ExecStart = "${rosEnv}/bin/roslaunch /etc/${name}.launch";
           Restart = "always";
           User = name;
-          Group = name;
+          Group = "ros";
         };
       };
 
-      users.groups."${name}" = { };
       users.users."${name}" = {
         isSystemUser = true;
         createHome = true;
         home = "/srv/${name}";
         homeMode = "0750";
-        group = name;
+        group = "ros";
         packages = [ rosEnv ];
       };
     };
 in
 {
+  users.groups.ros = { };
   imports = [
     (mkRobot "salameche" 1)
     (mkRobot "carapuce" 2)
