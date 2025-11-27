@@ -37,7 +37,7 @@ in
     '';
 
     # ref. https://grafana.com/docs/loki/latest/configure/examples/configuration-examples/#1-local-configuration-exampleyaml
-    "${lokiConfigFile}".source = (pkgs.formats.yaml { }).generate "loki.yaml" {
+    "${lokiConfigFile}".source = (pkgs.formats.yaml { }).generate lokiConfigFile {
       "auth_enabled" = false;
       "server" = {
         "http_listen_port" = lokiPort;
