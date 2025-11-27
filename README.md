@@ -24,6 +24,8 @@ yarn dev
 nix run .#nixosConfigurations.server.config.system.build.vm
 ```
 
+(This use ROS noetic from [nix-ros-overlay](https://github.com/lopsided98/nix-ros-overlay), so if you don't want to rebuild everything don't forget to setup its [binary cache](https://github.com/lopsided98/nix-ros-overlay?tab=readme-ov-file#configure-binary-cache))
+
 ### SSH
 
 ```
