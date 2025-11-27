@@ -1,12 +1,12 @@
 <script lang="ts">
-  import Ros from "./lib/Ros.svelte";
+  import Ros from "./Ros.svelte";
   import {
     getTodos,
     createTodo,
     updateTodo,
     deleteTodo,
     type Todo
-  } from "./lib/api";
+  } from "./api";
 
   let todos: Todo[] = $state([]);
   let text = $state("");
