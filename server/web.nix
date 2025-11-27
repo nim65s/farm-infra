@@ -76,7 +76,6 @@ in
         default = true;
         locations =
           let
-            journaldGatewayPort = config.services.journald.gateway.port;
             grafanaHost = config.services.grafana.settings.server.http_addr;
             grafanaPort = config.services.grafana.settings.server.http_port;
             proxy = proxyPass: {
@@ -103,7 +102,6 @@ in
             "/api" = proxy "http://unix:${socket}";
             "/backend" = proxy "http://unix:${socket}";
             "/static" = static staticDir;
-            "/logs/" = proxy "http://localhost:${toString journaldGatewayPort}/";
             "/whoami" = proxy "http://localhost:8080";
             "/ws/salameche" = proxy "http://localhost:9001";
             "/ws/carapuce" = proxy "http://localhost:9002";
