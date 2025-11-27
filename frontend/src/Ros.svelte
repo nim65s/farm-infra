@@ -1,32 +1,22 @@
 <script lang="ts">
-  import { createRosFeed } from "./ros";
+  let { instance } = $props();
 
-  const salameche = createRosFeed("salameche");
-  const carapuce = createRosFeed("carapuce");
-  const bulbizarre = createRosFeed("bulbizarre");
+  const proto = window.location.protocol === "https:" ? "wss:" : "ws:";
+  const host = window.location.host;
+  const ws = new WebSocket(`${proto}//${host}/ws/${instance}`);
 
-  let msgsSal: string[] = $state([]);
-  let msgsCar: string[] = $state([]);
-  let msgsBul: string[] = $state([]);
+  let messages: string[] = $state([]);
 
-  salameche.onMessage(m => msgsSal = [...m]);
-  carapuce.onMessage(m => msgsCar = [...m]);
-  bulbizarre.onMessage(m => msgsBul = [...m]);
+  ws.onopen = () => {
+      ws.send(JSON.stringify({ op: "subscribe", topic: "/chatter" }));
+  };
+
+  ws.onmessage = (ev) => {
+      const msg = typeof ev.data === "string" ? ev.data : JSON.stringify(ev.data);
+      messages = [...messages, msg].slice(-5);
+  };
 </script>
 
-<h2>ROS</h2>
-
-<h3>Salamèche</h3>
-{#each msgsSal as m}
-    <pre>{m}</pre>
-{/each}
-
-<h3>Carapuce</h3>
-{#each msgsCar as m}
-    <pre>{m}</pre>
-{/each}
-
-<h3>Bulbizarre</h3>
-{#each msgsBul as m}
+{#each messages as m}
     <pre>{m}</pre>
 {/each}

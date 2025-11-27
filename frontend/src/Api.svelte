@@ -1,6 +1,6 @@
 <script lang="ts">
   import {
-    getTodos,
+    listTodos,
     createTodo,
     updateTodo,
     deleteTodo,
@@ -11,7 +11,7 @@
   let text = $state("");
 
   async function load() {
-    todos = await getTodos();
+    todos = await listTodos();
   }
 
   async function add() {

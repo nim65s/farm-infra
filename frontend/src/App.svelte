@@ -4,4 +4,14 @@
 </script>
 
 <Api />
-<Ros />
+
+<h2>ROS</h2>
+
+<h3>Salamèche</h3>
+<Ros instance={"salameche"} />
+
+<h3>Carapuce</h3>
+<Ros instance={"carapuce"} />
+
+<h3>Bulbizarre</h3>
+<Ros instance={"bulbizarre"} />
