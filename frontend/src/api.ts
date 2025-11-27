@@ -6,7 +6,7 @@ export interface Todo {
 
 const API = "http://localhost:8000/api/todos";
 
-export async function getTodos(): Promise<Todo[]> {
+export async function listTodos(): Promise<Todo[]> {
   const r = await fetch(API);
   return r.json();
 }

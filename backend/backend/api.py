@@ -26,7 +26,7 @@ class TodoUpdateSchema(ModelSchema):
 
 @api.get("/todos", response=list[TodoSchema])
 def list_todos(request):
-    return Todo.objects.all()
+    return Todo.objects.all().order_by("id")
 
 
 @api.post("/todos", response=TodoSchema)

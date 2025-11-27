@@ -1,66 +1,17 @@
 <script lang="ts">
-  import Ros from "./lib/Ros.svelte";
-  import {
-    getTodos,
-    createTodo,
-    updateTodo,
-    deleteTodo,
-    type Todo
-  } from "./lib/api";
-
-  let todos: Todo[] = [];
-  let text = "";
-
-  async function load() {
-    todos = await getTodos();
-  }
-
-  async function add() {
-    if (text.trim().length === 0) return;
-    await createTodo(text);
-    text = "";
-    await load();
-  }
-
-  async function toggle(todo: Todo) {
-    await updateTodo(todo.id, !todo.done);
-    await load();
-  }
-
-  async function remove(id: number) {
-    await deleteTodo(id);
-    await load();
-  }
-
-  load();
+  import Api from "./Api.svelte";
+  import Ros from "./Ros.svelte";
 </script>
 
-<h1>Todo List</h1>
+<Api />
 
-<input
-  bind:value={text}
-  on:keydown={(e) => e.key === "Enter" && add()}
-/>
-<button on:click={add}>Add</button>
+<h2>ROS</h2>
 
-<ul>
-  {#each todos as todo}
-    <li>
-      <input
-        type="checkbox"
-        checked={todo.done}
-        on:change={() => toggle(todo)}
-      />
-      {todo.description}
-      <button on:click={() => remove(todo.id)}>❌</button>
-    </li>
-  {/each}
-</ul>
+<h3>Salamèche</h3>
+<Ros instance={"salameche"} />
 
-<Ros />
+<h3>Carapuce</h3>
+<Ros instance={"carapuce"} />
 
-<style>
-  ul {
-    text-align: left;
-  }
-</style>
+<h3>Bulbizarre</h3>
+<Ros instance={"bulbizarre"} />
